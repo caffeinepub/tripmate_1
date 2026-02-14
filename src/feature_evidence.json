@@ -1,0 +1,163 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-the-tripmate-mvp-user-flow-allow-a-traveler-to-enter-trip-details-trip-type-solo-or-group-bike-gang-destination-start-date-end-date-optional-notes-interests-and-submit-to-generate-a-trip-plan",
+      "featureTitle": "Create the TripMate MVP user flow: allow a traveler to enter trip details (trip type: solo or group/bike gang, destination, start date, end date, optional notes/interests) and submit to generate a trip plan.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/trips/MyTripsList.tsx",
+        "frontend/src/components/trips/TripDetailsForm.tsx",
+        "frontend/src/hooks/useTrips.ts",
+        "frontend/src/pages/TripPlannerPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-an-in-app-ai-agent-experience-as-a-deterministic-on-chain-itinerary-generator-no-external-llm-generate-an-end-to-end-plan-that-includes-a-daily-schedule-suggested-route-description-text-suggested-stay-food-categories-and-a-packing-checklist-section-based-on-trip-type-and-duration",
+      "featureTitle": "Implement an in-app “AI agent” experience as a deterministic, on-chain itinerary generator (no external LLM): generate an end-to-end plan that includes a daily schedule, suggested route description (text), suggested stay/food categories, and a packing/checklist section based on trip type and duration.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/trips/TripPlanView.tsx",
+        "frontend/src/hooks/useTrips.ts",
+        "frontend/src/pages/TripPlanDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-authentication-via-internet-identity-and-basic-account-model-travelers-can-sign-in-to-manage-their-own-trips-business-owners-can-sign-in-to-manage-their-own-promoted-listings",
+      "featureTitle": "Add authentication via Internet Identity and basic account model: travelers can sign in to manage their own trips; business owners can sign in to manage their own promoted listings.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/ProfileSetupModal.tsx",
+        "frontend/src/components/auth/RequireAuth.tsx",
+        "frontend/src/components/auth/RequireRole.tsx",
+        "frontend/src/hooks/useAuth.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-promoted-listings-feature-allow-business-owners-to-create-edit-and-delete-promoted-entries-name-category-resort-hotel-restaurant-tourist-place-destination-area-text-description-contact-info-optional-promo-text-travelers-can-browse-and-filter-these-listings-and-see-them-injected-into-trip-plans-as-sponsored-suggestions",
+      "featureTitle": "Create a promoted listings feature: allow business owners to create, edit, and delete promoted entries (name, category: resort/hotel/restaurant/tourist place, destination/area text, description, contact info, optional promo text). Travelers can browse and filter these listings and see them injected into trip plans as “Sponsored suggestions”.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/listings/ListingFormDialog.tsx",
+        "frontend/src/components/listings/ListingsFilters.tsx",
+        "frontend/src/components/trips/SponsoredSuggestions.tsx",
+        "frontend/src/components/trips/TripPlanView.tsx",
+        "frontend/src/hooks/useListings.ts",
+        "frontend/src/pages/ExploreListingsPage.tsx",
+        "frontend/src/pages/OwnerDashboardPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-frontend-ux-build-a-coherent-navigation-structure-with-pages-for-home-landing-trip-planner-new-trip-my-trips-trip-plan-detail-explore-promoted-listings-and-owner-dashboard",
+      "featureTitle": "Frontend UX: build a coherent navigation structure with pages for Home/Landing, Trip Planner (new trip + my trips), Trip Plan detail, Explore Promoted Listings, and Owner Dashboard.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/components/layout/TopNav.tsx",
+        "frontend/src/pages/LandingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-visual-theme-requirement-apply-a-distinctive-consistent-travel-themed-ui-style-avoid-blue-purple-across-typography-spacing-and-components-e-g-earthy-palette-such-as-sand-khaki-sage-with-charcoal-text-including-a-landing-hero-section-introducing-tripmate",
+      "featureTitle": "Visual theme requirement: apply a distinctive, consistent travel-themed UI style (avoid blue/purple) across typography, spacing, and components (e.g., earthy palette such as sand/khaki/sage with charcoal text), including a landing hero section introducing TripMate.",
+      "files": [
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/LandingPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-static-generated-image-assets-for-branding-and-ui-logo-simple-hero-illustration-and-render-them-in-the-frontend-from-frontend-public-assets-generated",
+      "featureTitle": "Add static generated image assets for branding and UI (logo + simple hero illustration) and render them in the frontend from frontend/public/assets/generated.",
+      "files": [
+        "frontend/src/pages/LandingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

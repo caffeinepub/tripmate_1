@@ -1,0 +1,178 @@
+{
+  "kind": "build_request",
+  "title": "TripMate MVP: Trip input + itinerary generator + promoted listings",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create the TripMate MVP user flow: allow a traveler to enter trip details (trip type: solo or group/bike gang, destination, start date, end date, optional notes/interests) and submit to generate a trip plan.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My app name is TripMate...like bike gang trip or solo trip...they can enter there destination and when they can go...we will guide they end to end."
+        ]
+      },
+      "acceptanceCriteria": [
+        "A Trip Details form exists with fields: trip type, destination, start date, end date, notes/interests.",
+        "Submitting the form creates a saved Trip record in the backend and navigates to a Trip Plan view.",
+        "Trips persist across page refreshes (loaded from backend)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement an in-app “AI agent” experience as a deterministic, on-chain itinerary generator (no external LLM): generate an end-to-end plan that includes a daily schedule, suggested route description (text), suggested stay/food categories, and a packing/checklist section based on trip type and duration.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "we will create a ai agent in the application.the ai agent can generate a trip plan."
+        ]
+      },
+      "acceptanceCriteria": [
+        "After trip submission, a generated plan is displayed with: overview, day-by-day itinerary, route guidance text, stay suggestions, food suggestions, checklist.",
+        "Generation works offline from external AI services (no API keys required).",
+        "User can regenerate the plan after editing trip inputs."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add authentication via Internet Identity and basic account model: travelers can sign in to manage their own trips; business owners can sign in to manage their own promoted listings.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "we will earn by the tourist places resorts,hotel and etc...the owners can gave a money promote their buisness in our application."
+        ]
+      },
+      "acceptanceCriteria": [
+        "App supports sign-in/sign-out with Internet Identity.",
+        "Authenticated users see only their own created trips and their own created business listings.",
+        "Unauthenticated users can browse public promoted listings but cannot create/edit trips or listings."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Create a promoted listings feature: allow business owners to create, edit, and delete promoted entries (name, category: resort/hotel/restaurant/tourist place, destination/area text, description, contact info, optional promo text). Travelers can browse and filter these listings and see them injected into trip plans as “Sponsored suggestions”.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "we will earn by the tourist places resorts,hotel and etc...the owners can gave a money promote their buisness in our application."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Business owners have a dashboard to CRUD their listings.",
+        "Travelers can browse a listings page and filter by category and destination text.",
+        "Trip Plan view shows a “Sponsored suggestions” section populated from listings that match the destination text (simple matching is acceptable)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement backend data models and persistence in a single Motoko actor for: user profiles (role: traveler/owner), trips, generated plans, and promoted listings; include query and update methods needed by the frontend.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes methods to create/read/update/delete trips for the authenticated caller.",
+        "Backend exposes methods to create/read/update/delete listings for the authenticated caller, plus a public query to browse listings.",
+        "Backend stores generated plans linked to trips and returns them to the frontend."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Frontend UX: build a coherent navigation structure with pages for Home/Landing, Trip Planner (new trip + my trips), Trip Plan detail, Explore Promoted Listings, and Owner Dashboard.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can navigate between the main sections via a top nav or sidebar.",
+        "Trip Plan detail page is accessible from “My Trips”.",
+        "Owner Dashboard is visible only to signed-in users with owner role."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Visual theme requirement: apply a distinctive, consistent travel-themed UI style (avoid blue/purple) across typography, spacing, and components (e.g., earthy palette such as sand/khaki/sage with charcoal text), including a landing hero section introducing TripMate.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "My app name is TripMate."
+        ]
+      },
+      "acceptanceCriteria": [
+        "App uses a consistent non-blue/purple palette and typography scale across pages.",
+        "Landing page includes a hero section describing TripMate and a clear primary CTA to plan a trip.",
+        "Components are consistently styled using Tailwind + existing UI component library composition (no edits to immutable component sources)."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Add static generated image assets for branding and UI (logo + simple hero illustration) and render them in the frontend from frontend/public/assets/generated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images exist under frontend/public/assets/generated and are referenced directly by the frontend.",
+        "Landing page displays the logo and hero illustration without loading them via the backend."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (no additional backend services).",
+    "Do not edit files in frontend immutablePaths (compose existing UI components instead).",
+    "Use English for all user-facing UI text.",
+    "Do not integrate external AI/LLM services; the “AI agent” must be implemented as an internal deterministic planner.",
+    "Do not implement GPS/maps/geolocation features (no navigation maps or GPS tracking)."
+  ],
+  "nonGoals": [
+    "Real-time navigation or turn-by-turn routing.",
+    "Integration with external booking providers (hotels, flights) or payment processing for promotions.",
+    "Third-party authentication providers other than Internet Identity.",
+    "Push notifications, email/SMS messaging, or real-time chat."
+  ],
+  "imageRequirements": {
+    "required": [
+      "TripMate logo mark, minimal compass + location pin style, earthy palette (tripmate-logo.dim_512x512.png)",
+      "Wide landing hero illustration: traveler with backpack + winding road + mountains, flat vector style, earthy palette (tripmate-hero.dim_1600x600.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [
+      "Build an MVP for TripMate: trip input, itinerary generation, and promoted listings for travel businesses."
+    ],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for user-facing UI text.",
+      "Prefer an earthy travel-themed visual style (avoid blue/purple)."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [
+      "Constraints acknowledged: no external LLM integrations; no GPS/maps/geolocation features."
+    ],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

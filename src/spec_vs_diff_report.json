@@ -1,0 +1,63 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-14T11:42:13.780Z",
+  "summary": "Diff adds a Motoko backend actor with core types for users/trips/plans/listings and a frontend with routing, Internet Identity auth gating, trip planner UI, listings CRUD UI, and sponsored suggestions rendering. Some user-facing additions (caffeine.ai branding/admin token) appear outside the BuildRequest, and some requirements cannot be fully verified due to truncation/omitted files.",
+  "missing_requirements": [],
+  "hallucinated_features": [
+    {
+      "description": "Footer includes third-party promotional attribution/link to caffeine.ai (“Built with … caffeine.ai”).",
+      "reason": "BuildRequest does not ask for any external promotional footer content or outbound referral links.",
+      "evidence": [
+        "frontend/src/components/layout/Footer.tsx"
+      ]
+    },
+    {
+      "description": "Backend/frontend include an admin/secret-token based access-control initialization flow (caffeineAdminToken and _initializeAccessControlWithSecret).",
+      "reason": "BuildRequest requires Internet Identity auth and per-caller access controls, but does not specify any admin-secret bootstrap token mechanism.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.55,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/auth/ProfileSetupModal.tsx",
+    "frontend/src/components/auth/RequireAuth.tsx",
+    "frontend/src/components/auth/RequireRole.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/layout/Footer.tsx",
+    "frontend/src/components/layout/TopNav.tsx",
+    "frontend/src/components/listings/ListingCard.tsx",
+    "frontend/src/components/listings/ListingFormDialog.tsx",
+    "frontend/src/components/listings/ListingsFilters.tsx",
+    "frontend/src/components/trips/MyTripsList.tsx",
+    "frontend/src/components/trips/SponsoredSuggestions.tsx",
+    "frontend/src/components/trips/TripDetailsForm.tsx",
+    "frontend/src/components/trips/TripPlanView.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useAuth.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useListings.ts",
+    "frontend/src/hooks/useProfile.ts",
+    "frontend/src/hooks/useTrips.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/ExploreListingsPage.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/pages/OwnerDashboardPage.tsx",
+    "frontend/src/pages/TripPlanDetailPage.tsx",
+    "frontend/src/pages/TripPlannerPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

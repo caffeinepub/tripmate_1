@@ -1,0 +1,258 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "TripMate MVP (Frontend): Trip planner, deterministic itinerary display, auth, and promoted listings",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Provide Trip Details form (trip type, destination, dates, notes/interests) and submit flow that saves a trip and navigates to Trip Plan detail; load trips from backend on refresh.",
+      "acceptanceCriteria": [
+        "A Trip Details form exists with fields: trip type, destination, start date, end date, notes/interests.",
+        "Submitting the form creates a saved Trip record in the backend and navigates to a Trip Plan view.",
+        "Trips persist across page refreshes (loaded from backend)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TripPlannerPage.tsx",
+          "operation": "create",
+          "description": "Create the Trip Planner page that includes the Trip Details form and a “My Trips” list; on submit, call the backend capability to create a trip and navigate to the created Trip Plan detail. Use shadcn-ui composed components for form layout/validation and consistent UI (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/trips/TripDetailsForm.tsx",
+          "operation": "create",
+          "description": "Implement the Trip Details form component (trip type: solo/group/bike gang, destination, start/end dates, optional notes/interests) with client-side validation (end date >= start date) and submit handler. Compose shadcn-ui form primitives/inputs (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/trips/MyTripsList.tsx",
+          "operation": "create",
+          "description": "Create a “My Trips” list component that loads caller trip plans from the backend and links each item to the Trip Plan detail route. Compose shadcn-ui cards/list patterns (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/hooks/useTrips.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for trip operations (fetch caller trip plans; create trip). Leverage existing useActor to obtain an authenticated or anonymous actor as appropriate."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Add app routing and navigation wiring: register the Trip Planner route and a route for Trip Plan detail; ensure Trip Planner is reachable from top navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Display the deterministic, on-chain generated trip plan (overview, itinerary, route guidance, stay/food, checklist) and support editing inputs and regenerating the plan.",
+      "acceptanceCriteria": [
+        "After trip submission, a generated plan is displayed with: overview, day-by-day itinerary, route guidance text, stay suggestions, food suggestions, checklist.",
+        "Generation works offline from external AI services (no API keys required).",
+        "User can regenerate the plan after editing trip inputs."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TripPlanDetailPage.tsx",
+          "operation": "create",
+          "description": "Create the Trip Plan detail page that renders the returned TripPlan: overview (destination/dates/type), day-by-day itinerary, route guidance text, stay suggestions, food suggestions, and packing/checklist section. Provide an edit panel for trip inputs and a “Regenerate plan” action that calls the backend capability again and replaces the displayed plan."
+        },
+        {
+          "path": "frontend/src/components/trips/TripPlanView.tsx",
+          "operation": "create",
+          "description": "Create a presentational component to render the TripPlan sections (itinerary by day, route description, stay/food categories, checklist), with consistent typography and spacing using shadcn-ui composition (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/trips/RegeneratePlanPanel.tsx",
+          "operation": "create",
+          "description": "Add UI for editing trip inputs (mirroring the Trip Details form) and triggering regeneration; ensure the regenerated plan is shown without page reload. Compose shadcn-ui inputs/buttons/dialogs as needed (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/hooks/useTrips.ts",
+          "operation": "modify",
+          "description": "Extend trip hooks to support regeneration behavior (e.g., reusing createTrip mutation and updating cached trip plans list/detail upon success)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Trip Plan detail page into routing, including route params/state needed to locate the plan in cached data or refetch from backend."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add Internet Identity authentication UX, profile setup (name + role), role-based navigation/guards, and public access to browsing listings only.",
+      "acceptanceCriteria": [
+        "App supports sign-in/sign-out with Internet Identity.",
+        "Authenticated users see only their own created trips and their own created business listings.",
+        "Unauthenticated users can browse public promoted listings but cannot create/edit trips or listings."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Implement sign-in/sign-out button using the selected authorization component guidance (Internet Identity via useInternetIdentity) and clear React Query cache on logout. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAuth.ts",
+          "operation": "create",
+          "description": "Create auth/profile hooks that call backend capabilities to get current user profile and role, and expose derived states (isAuthenticated, isTraveler, isBusinessOwner). Follow selected authorization component guidance to avoid profile-setup modal flash. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Add a first-login modal to collect display name and app role (traveler/business) and save to backend (createProfile/saveCallerUserProfile as appropriate). Compose shadcn-ui dialog/form components (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireAuth.tsx",
+          "operation": "create",
+          "description": "Add a route guard wrapper that blocks access to trip creation/management and owner dashboard when unauthenticated; show an AccessDenied-style screen with a login CTA. Use the selected authorization component guidance for access control UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireRole.tsx",
+          "operation": "create",
+          "description": "Add a role guard wrapper for business-owner-only sections (Owner Dashboard). Use profile appRole to determine access; render an access denied message if role mismatches. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire authentication state into the global layout (LoginButton in top nav), gate Trip Planner and Owner Dashboard routes using RequireAuth/RequireRole, and keep Explore Listings route publicly accessible."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement promoted listings: owner CRUD dashboard; public explore page with filters; show sponsored suggestions in trip plans matched by destination text.",
+      "acceptanceCriteria": [
+        "Business owners have a dashboard to CRUD their listings.",
+        "Travelers can browse a listings page and filter by category and destination text.",
+        "Trip Plan view shows a “Sponsored suggestions” section populated from listings that match the destination text (simple matching is acceptable)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ExploreListingsPage.tsx",
+          "operation": "create",
+          "description": "Create a public Explore Promoted Listings page that loads listings from backend public query and provides filters (category + destination text). Compose shadcn-ui inputs/selects/cards (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/pages/OwnerDashboardPage.tsx",
+          "operation": "create",
+          "description": "Create an Owner Dashboard page (role-guarded) that lists the caller’s promoted listings and supports create/edit/delete actions. Compose shadcn-ui table/cards/dialogs (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/listings/ListingFormDialog.tsx",
+          "operation": "create",
+          "description": "Add a create/edit dialog form for promoted listings (name, category, destination/area, description, contact info, optional promo text) with validation and submit actions. Compose shadcn-ui dialog/form components (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/listings/ListingsFilters.tsx",
+          "operation": "create",
+          "description": "Create reusable filter controls for category and destination text (used on Explore page). Compose shadcn-ui inputs/select components (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/trips/SponsoredSuggestions.tsx",
+          "operation": "create",
+          "description": "Implement a “Sponsored suggestions” section for the Trip Plan detail page that displays matching promoted listings. Matching can be simple (case-insensitive substring match against destination). Compose shadcn-ui cards/badges (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/hooks/useListings.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listings: public browse, filter by category, fetch caller’s listings, create/update/delete; ensure mutations invalidate relevant caches."
+        },
+        {
+          "path": "frontend/src/components/trips/TripPlanView.tsx",
+          "operation": "modify",
+          "description": "Wire SponsoredSuggestions into the TripPlanView so trip plans include a dedicated “Sponsored suggestions” section populated from the TripPlan.sponsoredSuggestions or by client-side matching when needed."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register routes for Explore Listings and Owner Dashboard, and add navigation links; ensure Owner Dashboard is only visible to signed-in users with business role."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Build coherent frontend navigation and page structure: Landing, Trip Planner (new trip + my trips), Trip Plan detail, Explore Listings, and Owner Dashboard with role-based visibility.",
+      "acceptanceCriteria": [
+        "Users can navigate between the main sections via a top nav or sidebar.",
+        "Trip Plan detail page is accessible from “My Trips”.",
+        "Owner Dashboard is visible only to signed-in users with owner role."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create a shared layout with top navigation (Landing/Home, Trip Planner, Explore Listings, Owner Dashboard when authorized) and a consistent content container. Compose shadcn-ui navigation primitives/buttons (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/layout/TopNav.tsx",
+          "operation": "create",
+          "description": "Implement the top nav including LoginButton and conditional links based on auth/role state (traveler vs business). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "create",
+          "description": "Create the Landing/Home page with hero section, CTA to plan a trip, and branded imagery (logo + hero illustration)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Set up routing for the required pages and ensure all navigable pages are registered and reachable via TopNav. Use a single layout wrapper around pages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply a consistent earthy travel-themed visual design (non-blue/purple) using Tailwind + shadcn/ui composition, including landing hero section CTA.",
+      "acceptanceCriteria": [
+        "App uses a consistent non-blue/purple palette and typography scale across pages.",
+        "Landing page includes a hero section describing TripMate and a clear primary CTA to plan a trip.",
+        "Components are consistently styled using Tailwind + existing UI component library composition (no edits to immutable component sources)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Add global Tailwind layers and define CSS variables for an earthy palette (sand/khaki/sage + charcoal text) mapped to the existing shadcn-style tokens (e.g., --background, --foreground, --primary). Ensure no blue/purple as primary accents."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Ensure Tailwind content paths include all newly created TS/TSX files and that design tokens remain compatible with shadcn-ui variable-driven theming (do not edit immutable component sources)."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Implement a travel-themed hero section with clear English copy introducing TripMate and a primary CTA linking to Trip Planner; apply the earthy theme via Tailwind utility composition and shadcn-ui components (verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Apply consistent spacing, typography scale, and background styling across pages using Tailwind + shadcn-ui composition (verify the component's usage instructions before implementing)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Add generated branding images (logo + hero illustration) under frontend/public/assets/generated and render them directly on the Landing page.",
+      "acceptanceCriteria": [
+        "Generated images exist under frontend/public/assets/generated and are referenced directly by the frontend.",
+        "Landing page displays the logo and hero illustration without loading them via the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/tripmate-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated TripMate logo image asset at frontend/public/assets/generated/tripmate-logo.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/tripmate-hero.dim_1600x600.png",
+          "operation": "create",
+          "description": "Add the generated TripMate hero illustration asset at frontend/public/assets/generated/tripmate-hero.dim_1600x600.png."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Reference and render the static images directly from frontend/public/assets/generated/tripmate-logo.dim_512x512.png and frontend/public/assets/generated/tripmate-hero.dim_1600x600.png within the landing hero section (no backend loading)."
+        }
+      ]
+    }
+  ]
+}
